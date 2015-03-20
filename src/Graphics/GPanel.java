@@ -49,6 +49,8 @@ public class GPanel extends JPanel {
 			x += 50;
 		}
 
+		//Example
+
 	}
 
 	public GPanel(boolean isDoubleBuffered) {

@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -43,13 +45,19 @@ public class GPanel extends JPanel {
 		int x = 0;
 		for (alpha = 1f; alpha > 0f; alpha -= 0.1f) {
 			g2.setColor(Color.BLACK);
-			g2.fillOval(x, 300, 100, 100);
+			g2.fillRect(x, 300, 100, 100);
 			AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
 			g2.setComposite(ac);
 			x += 50;
 		}
 
-		//Example
+		Point2D p1 = new Point2D.Double(10,200);
+		Point2D p2 = new Point2D.Double(10,10);
+		Line2D l = new Line2D.Double(p1, p2);
+		g2.setColor(Color.RED);
+		g2.draw(l);
+
+
 
 	}
 

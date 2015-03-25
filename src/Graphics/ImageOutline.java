@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.net.URL;
 import java.util.Date;
 
@@ -102,7 +101,7 @@ class ImageOutline {
     public static void displayAndWriteImage(
         BufferedImage image, String fileName) throws Exception {
 
-        ImageIO.write(image, "png", new File(fileName));
+//        ImageIO.write(image, "png", new File(fileName));
         JOptionPane.showMessageDialog(null, new JLabel(new ImageIcon(image)));
     }
 

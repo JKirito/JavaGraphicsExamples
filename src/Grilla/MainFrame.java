@@ -1,9 +1,19 @@
 package Grilla;
 
+import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Area;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import utils.StringSetCreator;
 
@@ -30,7 +40,7 @@ public class MainFrame extends JFrame {
 
 		// grilla = gp;
 		// grilla = new GrillaPanel(10, 10, 0.0001);
-		grilla.setSize(800, 500);
+		grilla.setSize(1300, 600);
 		grilla.setLocation(0, 0);
 		getContentPane().add(grilla);
 
@@ -46,9 +56,38 @@ public class MainFrame extends JFrame {
 		// getContentPane().add(btn);
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static BufferedImage drawOutline(int w, int h, Area area) {
 
-		final double tamañoCelda = 0.01;
+		final BufferedImage result = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = result.createGraphics();
+
+		g.setColor(Color.white);
+		AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
+		g.setComposite(ac);
+
+		g.fillRect(0, 0, w, h);
+
+		g.setClip(area);
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, w, h);
+
+		g.setClip(null);
+		g.setStroke(new BasicStroke(1));
+		g.setColor(Color.blue);
+		g.draw(area);
+
+		return result;
+	}
+
+	public static void displayAndWriteImage(BufferedImage image, String fileName) throws Exception {
+
+		 ImageIO.write(image, "png", new File(fileName));
+		JOptionPane.showMessageDialog(null, new JLabel(new ImageIcon(image)));
+	}
+
+	public static void main(String[] args) throws Exception {
+
+		final double tamañoCelda = 0.001;
 		// "y" vendría a ser latitud
 		double latMin = -37.5108465428739;
 		double latMax = -36.3764335428739;
@@ -59,37 +98,59 @@ public class MainFrame extends JFrame {
 
 		int cantX = new Double(Math.floor(((longMax - longMin) / tamañoCelda))).intValue();
 		int cantY = new Double(Math.floor(((latMax - latMin) / tamañoCelda))).intValue();
+		System.out.println(cantX);
+		System.out.println(cantY);
+
+		int tamañoCeldaPx = 10;
+
+		Area area = new Area();
+
+		// if (true)
+		// return;
 
 		CeldaGrilla[][] grilla = new CeldaGrilla[cantY + 1][cantX + 1];
-		inicilizar(grilla, cantY, cantX);
-
-//		if (true)
-//			return;
+		inicializar(grilla, cantY, cantX);
 
 		File file = new File("output");
 		StringSetCreator output = new StringSetCreator();
 		output.getStringSet(file);
 
+		int cont = 0;
 		for (String linea : output.getStringSet(file)) {
+			cont++;
 			linea = linea.replace("<", "").replace(">", "");
 			String[] datos = linea.split("	");
 			int col = Integer.valueOf(datos[0].split(",")[0]);
 			int fila = Integer.valueOf(datos[0].split(",")[1]);
 			double rend = Double.valueOf(datos[1]);
-//			System.out.println("rend "+rend);
-			grilla[col][fila] = new CeldaGrilla(rend);
+			grilla[col][fila].setRend(rend);// = new CeldaGrilla(rend);
+			Rectangle r = new Rectangle(col * tamañoCeldaPx, fila * tamañoCeldaPx, tamañoCeldaPx, tamañoCeldaPx);
+			area.add(new Area(r));
+			System.out.println("rend[" + col + "," + fila + "]: " + grilla[col][fila].getRend());
+			// System.out.println("REND: "+rend);
 		}
+		System.out.println("CONT: " + cont);
+
+		BufferedImage result = drawOutline(cantY * tamañoCeldaPx, cantX * tamañoCeldaPx, area);
+
+		displayAndWriteImage(result, "ejemplo");
+
+		if (true)
+			return;
 
 		GrillaPanel gp = new GrillaPanel(cantX, cantY, tamañoCelda);
-		gp.setCeldas(grilla);
+		System.out.println(grilla.length);
+		gp.setGrilla(grilla);
+		System.out.println(gp.getGrilla().length);
 		new MainFrame(gp).setVisible(true);
+		System.out.println(gp.getGrilla().length);
 
 	}
 
-	private static void inicilizar(CeldaGrilla[][] grilla, int cantY, int cantX) {
-		for (int i = 0; i < cantY; i++) {
-			for (int j = 0; j < cantX; j++) {
-//				System.out.println(i + " - " + j);
+	private static void inicializar(CeldaGrilla[][] grilla, int cantY, int cantX) {
+		for (int i = 0; i <= cantY; i++) {
+			for (int j = 0; j <= cantX; j++) {
+				// System.out.println(i + " - " + j);
 				grilla[i][j] = new CeldaGrilla(0);
 			}
 		}

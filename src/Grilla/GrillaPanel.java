@@ -13,8 +13,12 @@ public class GrillaPanel extends JPanel {
 	private int cantY;
 	private double tamañoCelda;
 
-	public void setCeldas(CeldaGrilla[][] celdas) {
-		this.grilla = celdas;
+	public CeldaGrilla[][] getGrilla() {
+		return grilla;
+	}
+
+	public void setGrilla(CeldaGrilla[][] grilla) {
+		this.grilla = grilla;
 	}
 
 	public GrillaPanel(int cantX, int cantY, double tamañoCelda) {
@@ -28,28 +32,34 @@ public class GrillaPanel extends JPanel {
 	}
 
 	public void paint(Graphics g) {
+		System.out.println("paint!");
 		Graphics2D g2 = (Graphics2D) g;
 
 		float alpha = 0;
-		int tamañoCeldapx = 10;
+		int tamañoCeldapx = 5;
 
-		int ipx = 0;
-		int jpx = 0;
-
-		for (int i = 0; i < this.cantY; i++, ipx += tamañoCeldapx) {
-			for (int j = 0; j < this.cantX; j++, jpx += tamañoCeldapx) {
-				// alpha = (float) (new Random().nextInt(10) / 10.0);
+		System.out.println(this.getGrilla().length + " - " + cantX + " - " + cantY);
+		System.out.println("total = " + (this.cantX * this.cantY));
+		int cont = 0;
+		for (int i = 0, ipx = 0; i <= this.cantY; i++, ipx += tamañoCeldapx) {
+			for (int j = 0, jpx = 0; j <= this.cantX; j++, jpx += tamañoCeldapx) {
+				cont++;
+//				alpha = (float) (new Random().nextInt(10) / 10.0);
 				// System.out.println(i + " - " + j);
-				alpha = 0.5f;//this.grilla[i][j].getRend();
-//				System.out.println(alpha + " - "+ this.grilla[i][j].getRend());
-//				if (alpha > 0) {
-//					System.out.println("alpha: " + alpha);
-//					System.out.println("i - j: " + ipx + " - " + jpx);
-//				}
+				System.out.println("ipx - jpx: " + ipx + " - " + jpx);
+				alpha = (float) this.grilla[i][j].getRend();
+				// assert(this.grilla[i][j].getRend() == alpha);
+				// System.out.println(alpha + " - "+
+				// this.grilla[i][j].getRend());
+				// if (alpha > 0) {
+				// System.out.println("alpha: " + alpha);
+				// System.out.println("i - j: " + ipx + " - " + jpx);
+				// }
 				// if(alpha > 1){
 				// alpha = 1f;
 				// }
-				g2.setColor(Color.RED);
+				System.out.println("alpha: " + alpha);
+				g2.setColor(Color.black);
 				g2.drawRect(ipx, jpx, tamañoCeldapx, tamañoCeldapx);
 
 				AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
@@ -58,6 +68,7 @@ public class GrillaPanel extends JPanel {
 				g2.fillRect(ipx, jpx, tamañoCeldapx, tamañoCeldapx);
 			}
 		}
+		System.out.println("fin: " + cont);
 
 		// for (alpha = 1f; alpha > 0f; alpha -= 0.1f) {
 		// g2.setColor(Color.BLACK);

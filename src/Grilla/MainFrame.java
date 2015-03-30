@@ -10,10 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import utils.StringSetCreator;
 
@@ -68,12 +65,12 @@ public class MainFrame extends JFrame {
 		g.fillRect(0, 0, w, h);
 
 		g.setClip(area);
-		g.setColor(Color.BLACK);
+		g.setColor(Color.green);
 		g.fillRect(0, 0, w, h);
 
 		g.setClip(null);
 		g.setStroke(new BasicStroke(1));
-		g.setColor(Color.blue);
+//		g.setColor(Color.blue);
 		g.draw(area);
 
 		return result;
@@ -82,7 +79,7 @@ public class MainFrame extends JFrame {
 	public static void displayAndWriteImage(BufferedImage image, String fileName) throws Exception {
 
 		 ImageIO.write(image, "png", new File(fileName));
-		JOptionPane.showMessageDialog(null, new JLabel(new ImageIcon(image)));
+//		JOptionPane.showMessageDialog(null, new JLabel(new ImageIcon(image)));
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -101,7 +98,7 @@ public class MainFrame extends JFrame {
 		System.out.println(cantX);
 		System.out.println(cantY);
 
-		int tamañoCeldaPx = 10;
+		int tamañoCeldaPx = 1;
 
 		Area area = new Area();
 

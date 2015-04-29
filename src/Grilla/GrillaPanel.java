@@ -4,7 +4,11 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class GrillaPanel extends JPanel {
@@ -33,10 +37,18 @@ public class GrillaPanel extends JPanel {
 
 	public void paint(Graphics g) {
 		System.out.println("paint!");
-		Graphics2D g2 = (Graphics2D) g;
+//		Graphics2D g2 = (Graphics2D) g;
+
+		// Constructs a BufferedImage of one of the predefined image types.
+	    BufferedImage bufferedImage = new BufferedImage(cantX, cantY, BufferedImage.TYPE_INT_RGB);
+
+	    // Create a graphics which can be used to draw into the buffered image
+	    Graphics2D g2 = bufferedImage.createGraphics();
+
+
 
 		float alpha = 0;
-		int tamañoCeldapx = 5;
+		int tamañoCeldapx = 50;
 
 		System.out.println(this.getGrilla().length + " - " + cantX + " - " + cantY);
 		System.out.println("total = " + (this.cantX * this.cantY));
@@ -69,6 +81,15 @@ public class GrillaPanel extends JPanel {
 			}
 		}
 		System.out.println("fin: " + cont);
+
+		// Save as PNG
+	    File file = new File("myimage.png");
+	    try {
+			ImageIO.write(bufferedImage, "png", file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// for (alpha = 1f; alpha > 0f; alpha -= 0.1f) {
 		// g2.setColor(Color.BLACK);

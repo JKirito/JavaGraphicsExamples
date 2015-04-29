@@ -3,26 +3,30 @@ package Grilla;
 public class CeldaGrilla {
 
 	private double valorRend;
+	private boolean vacio;
 
-	public CeldaGrilla(double valorRend) {
+	public CeldaGrilla(double valorRend, boolean isVacio) {
 		this.valorRend = valorRend;
+		this.vacio = isVacio;
 	}
 
 	public void setRend(double valorRend) {
 		this.valorRend = valorRend;
 	}
 
+	public boolean isVacio() {
+		return vacio;
+	}
+
+	public void setVacio(boolean vacio) {
+		this.vacio = vacio;
+	}
+
 	public CeldaGrilla() {
 	}
 
 	public float getRend() {
-		float rend = (float) (this.valorRend / 10.0);
-		if (this.valorRend != 0f) {
-			if (rend > 1f)
-				rend = 1f;
-		} else if (this.valorRend == 0f)
-			rend = 0f;
-		return rend;
+		return (float) this.valorRend;
 	}
 
 }
